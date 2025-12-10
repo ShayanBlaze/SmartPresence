@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import mongoose from "mongoose";
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app = express();
 const PORT = 5000;
@@ -8,18 +14,15 @@ const PORT = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-
 const usersDatabase = [];
 
-// مسیر ثبت نام (همان که در useFaceRegistration صدا می‌زنید)
-app.post("/register", (req, res) => {
+app.post("/api/v1/register", (req, res) => {
   const { name, studentId, faceDescriptor } = req.body;
 
   if (!name || !studentId || !faceDescriptor) {
     return res.status(400).json({ error: "اطلاعات ناقص است" });
   }
 
-  // بررسی تکراری نبودن (ساده)
   const existingUser = usersDatabase.find((u) => u.studentId === studentId);
   if (existingUser) {
     return res
@@ -27,12 +30,11 @@ app.post("/register", (req, res) => {
       .json({ error: "این شماره دانشجویی قبلاً ثبت شده است" });
   }
 
-  // ذخیره کاربر
   const newUser = {
     id: Date.now(),
     name,
     studentId,
-    faceDescriptor, // این همان آرایه‌ای است که برای تشخیص هویت لازم داریم
+    faceDescriptor,
     createdAt: new Date(),
   };
 
@@ -44,6 +46,12 @@ app.post("/register", (req, res) => {
   res
     .status(200)
     .json({ message: "ثبت نام با موفقیت انجام شد", userId: newUser.id });
+});
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 app.listen(PORT, () => {
