@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import faceapi from "face-api.js";
+import * as faceapi from "face-api.js";
 import axios from "axios";
 import {
   API_BASE_URL,
@@ -170,4 +170,3 @@ const useFaceRegistration = () => {
 };
 
 export default useFaceRegistration;
-
