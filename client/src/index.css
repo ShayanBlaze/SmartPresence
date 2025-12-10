@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    direction: rtl;
+    text-align: right;
+    @apply m-0 min-h-screen bg-slate-950 font-sans text-slate-100 antialiased;
+  }
+
+  input,
+  textarea,
+  button,
+  label {
+    font-family: inherit;
+  }
+
+  input,
+  textarea {
+    text-align: right;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    text-align: right;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
